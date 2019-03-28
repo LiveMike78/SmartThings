@@ -14,7 +14,7 @@
  *
  */
 definition(
-    name: "ST-PIWebAPI2",
+    name: "ST-PIWebAPI",
     namespace: "LiveMike78",
     author: "Michael Horrocks",
     description: "Push Event Values to OSIsoft PI",
@@ -26,7 +26,10 @@ definition(
 
 preferences {
 
-    section("Devices To Monitor:") {
+	// included all capabilities not marked as dead 2019-03-26
+	// this includes proposed and deprecated
+	
+	section("Devices To Monitor:") {
 		input "accelerationSensors", "capability.accelerationSensor", title: "Acceleration Sensors", multiple: true, required: false
 		input "airConditionerModes", "capability.airConditionerMode", title: "Air Conditioner Modes", multiple: true, required: false
 		input "airQualitySensors", "capability.airQualitySensor", title: "Air Quality Sensors", multiple: true, required: false
@@ -122,28 +125,15 @@ preferences {
 		input "washerOperatingStates", "capability.washerOperatingState", title: "Washer Operating States", multiple: true, required: false
 		input "waterSensors", "capability.waterSensor", title: "Water Sensors", multiple: true, required: false
 		input "windowShades", "capability.windowShade", title: "Window Shades", multiple: true, required: false
-    }
+    	}
 
 	section("OSIsoft PIWebAPI") {
-		// TODO: put inputs here
+		// Enter the PI Data Archive Name, PI Web API URL and encode64 username and password
 
 		input "pi", "text", required: true, multiple: false, title: "PI Server Name?"
-        input "piwebapi", "text", required: true, multiple: false, title: "PI Web API Url?"
-        input "piid", "text", required: true, multiple: false, title: "PI Web API Id?"
-        
-        //input "accelerations", "capability.accelerationSensor", required: false, multiple: true, title: "Device Motions?"
-        //input "batteries", "capability.battery", required: false, multiple: true, title: "Batteries?"
-        //// input "colortemps", "capability.colorTemperature", required: false, multiple: true, title: "Color Temperatures?"
-        //input "contacts", "capability.contactSensor", required: false, multiple: true, title: "Contact Sensors?"
-        //input "humidities", "capability.relativeHumidityMeasurement", required: false, multiple: true, title: "Humidities?"
-        //input "illuminance", "capability.illuminanceMeasurement", required: false, multiple: true, title: "Illuminances?"
-        //input "motions", "capability.motionSensor", required: false, multiple: true, title: "Motion Sensors?"
-        //input "presences", "capability.presenceSensor", required: false, multiple: true, title: "Presence Sensors?"
-        //input "switches", "capability.switch", required: false, multiple: true, title: "Switches?"
-        //input "switchlevels", "capability.switchLevel", required: false, multiple: true, title: "Switch Levels?"
-        //input "temperatures", "capability.temperatureMeasurement", required: false, multiple: true, title: "Temperatures?"
-        //input "waters", "capability.waterSensor", required: false, multiple: true, title: "Water Sensors?"
-        
+        	input "piwebapi", "text", required: true, multiple: false, title: "PI Web API Url?"
+        	input "piid", "text", required: true, multiple: false, title: "PI Web API Id?"
+                
 	}
 }
 
@@ -316,73 +306,69 @@ def evtHandler(evt) {
 	def evtName = "${evt.name}"
 
 	def devName = evt.getDevice().getName()
-    
-    def tagName = "$devName"+"."+"$evtName"
-    def evtValue = evt.value
-    def evtTime = "${evt.isoDate}"
+	def tagName = "$devName"+"."+"$evtName"
+	def evtValue = evt.value
+	def evtTime = "${evt.isoDate}"
     
 	log.debug "$tagname : $evtTime : $evtValue"
 	piWriter(tagName, evtValue, evtTime)
 }
 
-def getWebId(tag)
-	{
-
-    // get WebId of tag
+def getWebId(tag) {
+	
+    	// get WebId of tag    
+   	log.debug "getWebID: trying to find WebId for $tag"
     
-    log.debug "getWebID: trying to find WebId for $tag"
-    
-    // path is \\<pi server>\<tag>
-    def ptPath = "path="+URLEncoder.encode("\\\\$pi\\$tag")
+   	// path is \\<pi server>\<tag>
+   	def ptPath = "path="+URLEncoder.encode("\\\\$pi\\$tag")
 	def webId = ""
     
 	def params = [
-    	uri: "$piwebapi/points?$ptPath",
-        headers: [contenttype: "application/json", authorization: "basic $piid"],        
-	]
+    		uri: "$piwebapi/points?$ptPath",
+        	headers: [contenttype: "application/json", authorization: "basic $piid"],        
+		]
     
-    try {
-    	httpGet(params) { response ->
-        	webId = response.data.WebId
-        }
-    }
-
+    	try {
+    		httpGet(params) { response ->
+        		webId = response.data.WebId
+        	}
+    	}
 	catch (e) {
-    	log.debug "exception: $e"
+    		log.debug "exception: $e"
 	}	
     
-    log.debug "$webId"
+    	log.debug "$webId"
+	
 	return webId    
-
 }
     
 def piWriter(tag, val, ts) {
     
-    // get the WebId for the PI Tag
+    	// get the WebId for the PI Tag
 	def webId = getWebId(tag)
     
-    // create the value message; (note; use digital PI Points when states are being recorded)
-    def evtJson = new groovy.json.JsonOutput().toJson(
-    	[Value: "$val",
-        Timestamp: "$ts"]
+    	// create the value message; (note; use digital PI Points when states are being recorded)
+    	def evtJson = new groovy.json.JsonOutput().toJson(
+    		[Value: "$val",
+        		Timestamp: "$ts"]
         )
 
 	def params = [
-    	uri: "$piwebapi/streams/$webId/Value",
+    		uri: "$piwebapi/streams/$webId/Value",
  		headers: [authorization: "basic $piid"],
-        body: evtJson
+        	body: evtJson
 	]
     
-    // post to the PI Web API
+    	// post to the PI Web API
 	try {
-    	httpPostJson(params) { resp ->
-        	resp.headers.each {
-            	log.debug "${it.name} : ${it.value}"
-        	}
-        	log.debug "posted $tag : $val"
-    	}
+    		httpPostJson(params) { resp ->
+        		resp.headers.each {
+            			log.debug "${it.name} : ${it.value}"
+        		}
+        		log.debug "posted $tag : $val"
+    		}
 	}
-    catch (e) {
-    	log.debug "exception: $e"
+    	catch (e) {
+    		log.debug "exception: $e"
 	}	
 }
