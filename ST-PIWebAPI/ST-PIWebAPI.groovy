@@ -102,7 +102,7 @@ preferences {
 		input "speechRecognitions", "capability.speechRecognition", title: "Speech Recognitions", multiple: true, required: false
 		input "stepSensors", "capability.stepSensor", title: "Step Sensors", multiple: true, required: false
 		input "switchLevels", "capability.switchLevel", title: "Switch Levels", multiple: true, required: false
-		input "switchs", "capability.switch", title: "Switchs", multiple: true, required: false
+		input "switches", "capability.switch", title: "Switchs", multiple: true, required: false
 		input "tamperAlerts", "capability.tamperAlert", title: "Tamper Alerts", multiple: true, required: false
 		input "temperatureMeasurements", "capability.temperatureMeasurement", title: "Temperature Measurements", multiple: true, required: false
 		input "thermostatCoolingSetpoints", "capability.thermostatCoolingSetpoint", title: "Thermostat Cooling Setpoints", multiple: true, required: false
@@ -254,7 +254,7 @@ def initialize() {
 	subscribe(stepSensors, "goal", evtHandler)
 	subscribe(stepSensors, "steps", evtHandler)
 	subscribe(switchLevels, "level", evtHandler)
-	subscribe(switchs, "switch", evtHandler)
+	subscribe(switches, "switch", evtHandler)
 	subscribe(tamperAlerts, "tamper", evtHandler)
 	subscribe(temperatureMeasurements, "temperature", evtHandler)
 	subscribe(thermostatCoolingSetpoints, "coolingSetpoint", evtHandler)
