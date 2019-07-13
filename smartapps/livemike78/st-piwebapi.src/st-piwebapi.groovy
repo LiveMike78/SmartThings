@@ -86,7 +86,7 @@ preferences {
 		input "rapidCoolings", "capability.rapidCooling", title: "Rapid Coolings", multiple: true, required: false
 		input "refrigerationSetpoints", "capability.refrigerationSetpoint", title: "Refrigeration Setpoints", multiple: true, required: false
 		input "relativeHumidityMeasurements", "capability.relativeHumidityMeasurement", title: "Relative Humidity Measurements", multiple: true, required: false
-		input "relaySwitchs", "capability.relaySwitch", title: "Relay Switchs", multiple: true, required: false
+		input "relaySwitches", "capability.relaySwitch", title: "Relay Switches", multiple: true, required: false
 		input "robotCleanerCleaningModes", "capability.robotCleanerCleaningMode", title: "Robot Cleaner Cleaning Modes", multiple: true, required: false
 		input "robotCleanerMovements", "capability.robotCleanerMovement", title: "Robot Cleaner Movements", multiple: true, required: false
 		input "robotCleanerTurboModes", "capability.robotCleanerTurboMode", title: "Robot Cleaner Turbo Modes", multiple: true, required: false
@@ -99,7 +99,7 @@ preferences {
 		input "speechRecognitions", "capability.speechRecognition", title: "Speech Recognitions", multiple: true, required: false
 		input "stepSensors", "capability.stepSensor", title: "Step Sensors", multiple: true, required: false
 		input "switchLevels", "capability.switchLevel", title: "Switch Levels", multiple: true, required: false
-		input "switchs", "capability.switch", title: "Switchs", multiple: true, required: false
+		input "switches", "capability.switch", title: "Switches", multiple: true, required: false
 		input "tamperAlerts", "capability.tamperAlert", title: "Tamper Alerts", multiple: true, required: false
 		input "temperatureMeasurements", "capability.temperatureMeasurement", title: "Temperature Measurements", multiple: true, required: false
 		input "thermostatCoolingSetpoints", "capability.thermostatCoolingSetpoint", title: "Thermostat Cooling Setpoints", multiple: true, required: false
@@ -249,7 +249,7 @@ def initialize() {
 	subscribe(rapidCoolings, "rapidCooling", evtHandler)
 	subscribe(refrigerationSetpoints, "refrigerationSetpoint", evtHandler)
 	subscribe(relativeHumidityMeasurements, "humidity", evtHandler)
-	subscribe(relaySwitchs, "switch", evtHandler)
+	subscribe(relaySwitches, "switch", evtHandler)
 	subscribe(robotCleanerCleaningModes, "robotCleanerCleaningMode", evtHandler)
 	subscribe(robotCleanerMovements, "robotCleanerMovement", evtHandler)
 	subscribe(robotCleanerTurboModes, "robotCleanerTurboMode", evtHandler)
@@ -264,7 +264,7 @@ def initialize() {
 	subscribe(stepSensors, "goal", evtHandler)
 	subscribe(stepSensors, "steps", evtHandler)
 	subscribe(switchLevels, "level", evtHandler)
-	subscribe(switchs, "switch", evtHandler)
+	subscribe(switches, "switch", evtHandler)
 	subscribe(tamperAlerts, "tamper", evtHandler)
 	subscribe(temperatureMeasurements, "temperature", evtHandler)
 	subscribe(thermostatCoolingSetpoints, "coolingSetpoint", evtHandler)
