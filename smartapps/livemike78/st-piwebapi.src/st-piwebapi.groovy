@@ -17,7 +17,7 @@ definition(
     name: "ST-PIWebAPI",
     namespace: "LiveMike78",
     author: "Michael Horrocks",
-    description: "Push Event Values to OSIsoft PI",
+    description: "Push Event Values to OSIsoft PI Web API",
     category: "My Apps",
     iconUrl: "https://106c4.wpc.azureedge.net/80106C4/Gallery-Prod/cdn/2015-02-24/prod20161101-microsoft-windowsazure-gallery/osisoft.6df9de04-c074-4e96-9f8d-1ae95fce1115.1.0.4/Icon/large.png",
     iconX2Url: "https://106c4.wpc.azureedge.net/80106C4/Gallery-Prod/cdn/2015-02-24/prod20161101-microsoft-windowsazure-gallery/osisoft.6df9de04-c074-4e96-9f8d-1ae95fce1115.1.0.4/Icon/large.png",
